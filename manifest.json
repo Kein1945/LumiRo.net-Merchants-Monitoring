@@ -1,0 +1,26 @@
+{
+  "name": "Lumi merchant monitor",
+  "version": "1.0.1",
+  "description": "Merchant monitoring for ragnarok online server Lumiro.net",
+
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "notifications"
+  ],
+
+  "browser_action": {
+    "default_title": "Lumi Merchant",
+    "default_icon": "Images/ico.png",
+    "popup": "popup.html"
+  },
+  "icons": {
+    "16": "Images/ico16.png",
+    "48": "Images/search.png",
+    "128": "Images/search.png"
+  },
+
+  "options_page": "options.html",
+  "background_page": "background.html"
+}

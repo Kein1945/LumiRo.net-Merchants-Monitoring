@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="jquery.tmpl.min.js"></script>
+	<script type="text/javascript" src="jquery-ui-1.8.10.custom.min.js"></script>
+	<script type="text/javascript" src="index.js"></script>
+	<script type="text/javascript" src="options.js"></script>
+	<script type="text/javascript" src="storage.js"></script>
+  <script id="item-element" type="text/x-jquery-tmpl">
+
+  <li>
+    <div class="li-header dark-item drug-holder rounded{{if minimized}} minimized {{/if}}">
+      <a class="refresh" href="#" title="Переставить"><img src="Images/refresh.png" class="middle"/></a>
+      <span class="merchant-name">${name}</span>
+      {{if profit}}<span class="profit">&nbsp;+${$item.formatPrice(profit)}</span>{{/if}}
+      <a class="remove right" href="#" title="Удалить торговца"><img src="Images/cross.png" class="middle"/></a>
+      <a class="m-set-time right" href="#" title="Поставлен: ${time}">${refreshed}</a>
+    </div>
+    <table class="merchant-items">
+      {{each $item.data.items}}
+      <tr class="rounded
+      {{if count != nowcount}}
+        {{if nowcount}}
+         modifed half-item
+        {{else}}
+         sold sold-item
+        {{/if}} modifed-item
+      {{else}}
+        full-item
+      {{/if}}">
+        <td class="pico min-wid"><div style="${style}"></div></td>
+        <td class="attr min-wid">
+        {{if id!=12233 && attr.length}}
+          <div class="inf infico">&nbsp;
+          <ul class="datah">
+          {{each(aIndex,aValue) attr}}
+            <li class="rounded">${aValue}</li>
+          {{/each}}
+          </ul>
+          </div>
+        {{else}}
+        <div class="inf">&nbsp;</div>
+        {{/if}}
+        </td>
+        <td>{{if refain}}
+        <span class="refain">${refain}</span>
+        {{/if}}
+        {{if id==12233 && attr.length}}
+          {{each(aIndex,aValue) attr}}
+            <em>${aValue}</em>
+          {{/each}}
+        {{/if}}
+        ${name}</td>
+        <td class="price min-wid text-right">${price}</td>
+        <td class="count min-wid text-center">
+        {{if count != nowcount && nowcount}}
+        <span class="now-count">${nowcount}</span>/<span class="start-count">${count}</span>
+        {{else}}
+        ${nowcount}
+        {{/if}}
+        </td>
+        <td class="profit min-wid text-right">${profit}</td>
+      </tr>
+      {{/each}}
+    </table>
+  </li>
+  </script>
+</head>
+<body>
+<div id="wrapper" class="light-block screen-middle-block">
+<div id="SearchResources">
+<h2 class="title">LumiRo merchant monitoring<span>by Kein</span></h2>
+<div class="control top">
+<input type="button" id="btnAddNewItem" class="button dark-item rounded" value="Добавить торговца"/>
+<label id="notify">Уведомления <input type="checkbox"/></label>
+</div>
+<ul id="itemList" class="sortableUl itemList">
+
+</ul>
+</div>
+</div>
+<div id="info" class="light-block screen-middle-block">
+  <p>Расширение для мониторинга своих и не только торговцев на венде<br /></p>
+  <div class="infoblock">
+    <p>Для добавления нового торговца нажмите кнопоку "Добавить торговца".<br />
+    Если вы переставили торговца, все вещи будут как проданные - для этого нажмите кнопочку обновить(<img src="Images/refresh.png"/>) рядом с именем торговца.<br />
+    Данные обновляются каждые 20 минут. Если же вы хотите обновить сейчас данные по какому-то торговцу - то просто кликните по времени справа от имени.<br/>
+    Время обозначает когда товары обновлялись. Если навести мышку на время то во всплывающей подсказке будет время, когда мерчант был поставлен на венд(время день/месяц)<br />
+    </p>
+    <p>
+    В таблице с товарами используются цветовые обозначения. Если товар не продан то цвет фона <span class="full-item">такой</span>, если же кол-во изменилось(например поставили 500 а осталось 300), то цвет будет <span class="half-item">такой</span>. И наконец для полностью проданных вещей, цвет будет <span class="sold-item">такой</span>.
+    </p>
+    <p>
+      Если вы хотите выразить признательность за мою работу, можете выражать её в каком угодно эквиваленте в игре на персонажа "La Magic" ;)<br />
+      Либо на webmoney: <strong>Z950002970194</strong>, <strong>R162994593832</strong>.<br /> Или Yandex.Деньги: <strong>41001671076486</strong>.<br />
+      Если вы хотите сообщить об ошибки, то <a href="javascript:report()">нажмите сюда</a><textarea readonly="true" id="dump"></textarea>, затем скопируйте текст который вы получили, и отправьте мне его на <a href="mailto:psychotropic@xaker.ru">почту</a>
+    </p>
+    <p>С какими-то вопросами, пожеланиями, или заметками об ошибках пишите на psychotropic@xaker.ru.</p>
+    <p>Икноки из сета <a href="http://www.iconfinder.com/search/?q=iconset:fugue" title="iconfinder.com: Fugue iconset">Fugue</a></p>
+  </div>
+  <p><a href="javascript:showHelp();"> Подробнее</a></p>
+</div>
+</body>
+</html>

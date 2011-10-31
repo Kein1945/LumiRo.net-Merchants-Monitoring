@@ -1,0 +1,114 @@
+*{font-family: Georgia;font-size: 12px;}html,body,img,ul,form, input,h1, table, td, tr, div{margin: 0; padding: 0; border: none; border-spacing: 0;}ul{list-style: none;}html,body{background: white;}
+.itemList li div.li-header{
+  padding: 5px 10px;
+  border: 2px solid #333;
+  margin-top:5px;
+}
+.itemlist li div.li-header .merchant-name{
+  margin-left: 20px;
+  cursor: pointer;
+}
+.itemlist li div.li-header .m-set-time{
+  text-decoration: none; color: inherit; padding-right: 15px;
+}
+.itemlist li div.li-header .refresh {
+  padding-right: 10px;
+  width: 40px;
+}
+table.merchant-items {
+  border-spacing: 2px;
+}
+.itemlist li table.merchant-items{
+  padding: 2px 5px 2px 48px; width: 100%;
+}
+.itemlist li table.merchant-items td {
+  padding: 2px 5px;
+}
+.itemlist li table.merchant-items td.pico div{
+  width: 24px; height: 24px;
+}
+.itemlist li table.merchant-items td.attr div.inf{
+  width: 26px; height: 26px; margin: 0;position: relative;
+}
+.itemlist li table.merchant-items td.attr div.infico{
+  background: url('Images/card.png') center center no-repeat;
+}
+.itemlist li table.merchant-items td.attr ul.datah{
+  position: absolute; left: -9999px; top: 30px;
+}
+.itemlist li table.merchant-items td.attr ul.datah li{
+  padding: 5px 5px 5px 30px; border: 1px solid #ccc;
+  background: url('Images/card.png') 5px center no-repeat #fafafa; margin: 1px;
+}
+.itemlist li table.merchant-items td.attr:hover ul.datah,.itemlist li table.merchant-items tr:hover td.attr ul.datah{
+  left: -5px;
+}
+.itemlist li div.minimized + table {
+  display:none;
+}
+.itemlist li div.minimized .merchant-name{
+  color: #998;
+}
+.control{
+  padding: 20px 0;
+}
+.control.top{
+  padding-bottom: 7px;
+}
+.button{
+  border: 1px solid #000;
+  padding: 5px;
+}
+#btnAddNewItem{
+  background: url('Images/plus.png') 10px center no-repeat #2F2933;
+  padding: 5px 10px 5px 35px; height: 30px;
+}
+#notify { float: right; padding-top: 7px;}
+#notify input {
+  vertical-align: middle;
+}
+#info{
+  background-image: url('Images/information-button.png');
+  background-position: 28px center;
+  background-repeat: no-repeat;
+}
+#info p{
+  padding-left: 50px;
+}
+.infoblock{
+  display: none;
+}
+#dump{
+  display: none; clear: both; width: 100%; height: 150px;
+}
+.title{
+  font-size: 16px; text-align: center; display: block; font-weight: normal;
+}
+.title span{font-size: 9px; padding-left: 10px; vertical-align: middle;}
+/* ===== Structure ===== */
+.clear{clear:both}
+.right {float: right;}
+.text-right{text-align: right;}
+.text-center{text-align: center;}
+.text-left{text-align: left;}
+img.middle{display: inline-block; vertical-align: middle;}
+.min-wid{width: 26px; padding: 2px;}
+.screen-middle-block{margin: 20px auto;width: 600px;padding: 10px 20px;}
+/* ===== Styling ===== */
+.rounded, .rounded td{border-radius: 5px}
+.modifed-item td{border-style: dashed;}
+.screen-middle-block{border-width: 1px; border-style: solid; border-radius:5px;}
+.merchant-items td, .merchant-items td li{border-width: 1px;}
+/* ===== Colloring ===== */
+.merchant-items td, .merchant-items td li{border-color: #ccc;}
+.screen-middle-block{border-color: #f1f1f1;}
+.light-block{background-color: #fafafa;}
+.dark-item{background-color: #2F2933; color: #fff; border-color: #333;}
+
+.full-item td,.full-item{background-color: #FFFFA6;}
+.half-item td,.half-item{background-color: #BDF271;}
+.sold-item td,.sold-item{background-color: #01A2A6;}
+.li-header .profit{color: #BDF271;}
+.modifed-item td{border-color:#333}
+.start-count{color: #2F2933;}
+.now-count{color: #01A2A6;}
