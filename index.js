@@ -87,7 +87,7 @@
         name: creator+ re[4]+re[5].trim().replace(/\<a\shref="http:\/\/poring.ru(?:[\s\S]*?)\/a>/gim, ''),
         refain: re[2],
         price: re[7],
-        real_price: re[7].replace('.',''),
+        real_price: re[7].replace(/\./g,''),
         profit: 0,
         count: re[8],
         nowcount: re[8],
