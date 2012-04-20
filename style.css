@@ -85,6 +85,13 @@ table.merchant-items {
   font-size: 16px; text-align: center; display: block; font-weight: normal;
 }
 .title span{font-size: 9px; padding-left: 10px; vertical-align: middle;}
+.external {
+  width: 14px;
+  background: url('Images/external.png') no-repeat center top;
+  display:inline-block;
+  margin-left: 4px;
+  text-decoration: none;
+}
 /* ===== Structure ===== */
 .clear{clear:both}
 .right {float: right;}

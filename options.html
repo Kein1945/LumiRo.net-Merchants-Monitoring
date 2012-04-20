@@ -54,7 +54,7 @@
             <em>${aValue}</em>
           {{/each}}
         {{/if}}
-        <a href="http://www.poring.ru/items/${id}.html" target="_blank">${name}</a></td>
+        <a href="http://www.poring.ru/items/${id}.html" target="_blank" title="Poring.ru">${name}</a><a href="http://market.lumiro.net/whosell.php?s=${id}&field=price&order=asc" class="external" target="_blank" title="Кто еще продает">&nbsp;</a></td>
         <td class="price min-wid text-right">${price}</td>
         <td class="count min-wid text-center">
         {{if count != nowcount && nowcount}}

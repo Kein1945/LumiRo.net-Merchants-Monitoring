@@ -1,6 +1,6 @@
 {
   "name": "Lumi merchant monitor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Merchant monitoring for ragnarok online server Lumiro.net",
 
   "permissions": [
