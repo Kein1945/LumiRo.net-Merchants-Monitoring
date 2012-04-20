@@ -84,7 +84,7 @@
       items[items.length] = {
         style : re[1],
         id: re[3],
-        name: creator+ re[4]+re[5].trim().replace(/\<a\shref="http:\/\/poring.ru(?:[\s\S]*?)\/a>/gim, ''),
+        name: creator+ re[4]+re[5].trim().replace(/\<a\shref=\"http:\/\/www.poring.ru\/.*?>[\s\S]*<img.*?>[\s\S]*?\<\/a>/gim, ''),
         refain: re[2],
         price: re[7],
         real_price: re[7].replace(/\./g,''),
@@ -178,7 +178,10 @@ var Merchant = function(data){
         notify(Merc.name, '+ '+number_format(Merc.MercData.profit - Merc.MercData.timed_profit, {decimals: 0, thousands_sep: "."}));
         Merc.MercData.timed_profit = Merc.MercData.profit;
       }
-      Merc.MercData.refreshed = time.getHours()+':'+time.getMinutes();
+      var hours=time.getHours();
+      var minutes=time.getMinutes();
+      if(minutes<10) minutes='0'+minutes;
+      Merc.MercData.refreshed = hours+':'+minutes;
       Merchants.persist(Merc);
       update_callback?update_callback():false;
     });
