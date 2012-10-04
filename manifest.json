@@ -20,7 +20,9 @@
     "48": "Images/search.png",
     "128": "Images/search.png"
   },
-
+    "sandbox": {
+        "pages": ["sandbox.html"]
+    },
   "options_page": "options.html",
   "background_page": "background.html"
 }
