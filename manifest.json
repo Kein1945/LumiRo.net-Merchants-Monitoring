@@ -2,6 +2,7 @@
   "name": "Lumi merchant monitor",
   "version": "1.0.4",
   "description": "Merchant monitoring for ragnarok online server Lumiro.net",
+    "manifest_version": 2,
 
   "permissions": [
     "tabs",
@@ -22,6 +23,8 @@
     "sandbox": {
         "pages": ["sandbox.html"]
     },
-  "options_page": "options.html",
-  "background_page": "background.html"
+    "background" : {
+        "scripts" : ["background.js", "index.js", "storage.js", "jquery.js"]
+    },
+  "options_page": "options.html"
 }
