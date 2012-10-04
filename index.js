@@ -72,7 +72,7 @@
       AditionalsString = re[6].trim();
       var creator = '';
       if(AditionalsString.length){
-        var CardsRegExp = /javascript:perf\('[^']+'\);">([^<]+?)<\/a><\/td/gim;
+        var CardsRegExp = /javascript:perf\('[^']+'\);">([^<]+?)<\/a>/gim;
         while( (card = CardsRegExp.exec(AditionalsString)) ){
           tmp_cards[tmp_cards.length] = card[1];
         }
