@@ -5,8 +5,7 @@
 
   "permissions": [
     "tabs",
-    "http://*/*",
-    "https://*/*",
+    "http://market.lumiro.net/*",
     "notifications"
   ],
 
