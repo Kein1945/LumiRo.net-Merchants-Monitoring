@@ -24,7 +24,7 @@
         "pages": ["sandbox.html"]
     },
     "background" : {
-        "scripts" : ["background.js", "index.js", "storage.js", "jquery.js"]
+        "page" : "background.html"
     },
   "options_page": "options.html"
 }
