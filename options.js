@@ -1,4 +1,5 @@
 $(function(){
+    $('#sandbox').load(function(){
   $('#itemList').sortable({ axis: 'y', connectWith: '.sortableUl', handle: '.drug-holder', cursor: 'move' , opacity: 0.5, delay: 200, update: function(){
     var reorder_merch_list = [];
     $('.li-header .merchant-name').each(function(){
@@ -70,6 +71,7 @@ $(function(){
       localStorage.notify = this.checked?'':'false';
     });
   }
+    })
 });
 
 function showHelp(){
@@ -85,10 +87,17 @@ function report(){
 function redrawList(){
   $('#itemList').html('');
   Merchants.eachMerch(function(merch){
-    $('#item-element').tmpl(merch.getData(),{
-      formatPrice: function(value){
-        return number_format(value, {decimals: 0, thousands_sep: "."});
-      }
-    }).appendTo('#itemList');
+      var template = getTemplate('item-element', $('#item-element').html());
+      template(merch.getData(), function(html){
+          $('#itemList').html($('#itemList').html()+html)
+      })
+//      render('item-element', merch.getData(), function(html){
+//          $('#itemList').html($('#itemList').html()+html)
+//      })
+//    $('#item-element').tmpl(merch.getData(),{
+//      formatPrice: function(value){
+//        return number_format(value, {decimals: 0, thousands_sep: "."});
+//      }
+//    }).appendTo('#itemList');
   });
 }

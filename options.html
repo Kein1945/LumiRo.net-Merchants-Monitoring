@@ -9,68 +9,70 @@
 	<script type="text/javascript" src="jquery-ui-1.8.10.custom.min.js"></script>
 	<script type="text/javascript" src="index.js"></script>
 	<script type="text/javascript" src="options.js"></script>
-	<script type="text/javascript" src="storage.js"></script>
+    <script type="text/javascript" src="storage.js"></script>
+    <script type="text/javascript" src="utils.js"></script>
   <script id="item-element" type="text/x-jquery-tmpl">
 
   <li>
-    <div class="li-header dark-item drug-holder rounded{{if minimized}} minimized {{/if}}">
+    <div class="li-header dark-item drug-holder rounded<% if (typeof(minimized)!='undefined' && minimized) { %> minimized <% } %>">
       <a class="refresh" href="#" title="Переставить"><img src="Images/refresh.png" class="middle"/></a>
-      <span class="merchant-name">${name}</span>
-      {{if profit}}<span class="profit">&nbsp;+${$item.formatPrice(profit)}</span>{{/if}}
+      <span class="merchant-name"><%=name%></span>
+      <% if (profit) { %><span class="profit">&nbsp;+<% print(formatPrice(profit))%></span><% } %>
       <a class="remove right" href="#" title="Удалить торговца"><img src="Images/cross.png" class="middle"/></a>
-      <a class="m-set-time right" href="#" title="Поставлен: ${time}">${refreshed}</a>
+      <a class="m-set-time right" href="#"><%=refreshed%></a>
     </div>
     <table class="merchant-items">
-      {{each $item.data.items}}
+      <% _.each(items, function(item){ %>
       <tr class="rounded
-      {{if count != nowcount}}
-        {{if nowcount}}
+      <% if (item.count != item.nowcount) { %>
+        <%if (item.nowcount) { %>
          modifed half-item
-        {{else}}
+        <% } else { %>
          sold sold-item
-        {{/if}} modifed-item
-      {{else}}
+        <% } %> modifed-item
+      <%} else { %>
         full-item
-      {{/if}}">
-        <td class="pico min-wid"><div style="${style}"></div></td>
-        <td class="attr min-wid">
-        {{if id!=12233 && attr.length}}
-          <div class="inf infico">&nbsp;
-          <ul class="datah">
-          {{each(aIndex,aValue) attr}}
-            <li class="rounded">${aValue}</li>
-          {{/each}}
-          </ul>
-          </div>
-        {{else}}
-        <div class="inf">&nbsp;</div>
-        {{/if}}
-        </td>
-        <td>{{if refain}}
-        <span class="refain">${refain}</span>
-        {{/if}}
-        {{if id==12233 && attr.length}}
-          {{each(aIndex,aValue) attr}}
-            <em>${aValue}</em>
-          {{/each}}
-        {{/if}}
-        <a href="http://www.poring.ru/items/${id}.html" target="_blank" title="Poring.ru">${name}</a><a href="http://market.lumiro.net/whosell.php?s=${id}&field=price&order=asc" class="external" target="_blank" title="Кто еще продает">&nbsp;</a></td>
-        <td class="price min-wid text-right">${price}</td>
-        <td class="count min-wid text-center">
-        {{if count != nowcount && nowcount}}
-        <span class="now-count">${nowcount}</span>/<span class="start-count">${count}</span>
-        {{else}}
-        ${nowcount}
-        {{/if}}
-        </td>
-        <td class="profit min-wid text-right">${profit}</td>
+      <% } %>">
+        <td class="pico min-wid"><div style="<%=item.style%>"></div></td>
+          <td class="attr min-wid">
+              <% if (item.id!=12233 && item.attr.length) { %>
+              <div class="inf infico">&nbsp;
+                  <ul class="datah">
+                      <% _.each(item.attr, function(value){ %>
+                      <li class="rounded"><%=value%></li>
+                      <% }); %>
+                  </ul>
+              </div>
+              <% } else { %>
+              <div class="inf">&nbsp;</div>
+              <% } %>
+          </td>
+          <td><% if (item.refain) { %>
+              <span class="refain"><%=item.refain%></span>
+              <% } %>
+              <% if (item.id==12233 && item.attr.length) { %>
+                  <% _.each(item.attr, function(value){ %>
+                  <em><%=value%></em>
+                  <% }); %>
+              <% } %>
+              <a href="http://market.lumiro.net/whosell.php?s=<%=item.id%>&field=price&order=asc" title="Кто еще продает"><%=item.name%></a><a href="http://www.poring.ru/items/<%=item.id%>.html" target="_blank" class="external" target="_blank" title="Poring.ru">&nbsp;</a></td>
+          <td class="price min-wid text-right"><%=item.price%></td>
+          <td class="count min-wid text-center">
+              <% if (item.count != item.nowcount && item.nowcount) { %>
+              <span class="now-count"><%=item.nowcount%></span>/<span class="start-count"><%=item.count%></span>
+              <% } else { %>
+              <%=item.nowcount%>
+              <% } %>
+          </td>
+        <td class="profit min-wid text-right"><%=item.profit%></td>
       </tr>
-      {{/each}}
+      <% }) %>
     </table>
   </li>
   </script>
 </head>
 <body>
+<iframe id="sandbox" src="sandbox.html"></iframe>
 <div id="wrapper" class="light-block screen-middle-block">
 <div id="SearchResources">
 <h2 class="title">LumiRo merchant monitoring<span>by Kein</span></h2>
@@ -95,7 +97,7 @@
     В таблице с товарами используются цветовые обозначения. Если товар не продан то цвет фона <span class="full-item">такой</span>, если же кол-во изменилось(например поставили 500 а осталось 300), то цвет будет <span class="half-item">такой</span>. И наконец для полностью проданных вещей, цвет будет <span class="sold-item">такой</span>.
     </p>
     <p>
-      Если вы хотите выразить признательность за мою работу, можете выражать её в каком угодно эквиваленте в игре на персонажа "La Magic" ;)<br />
+      Если вы хотите выразить признательность за мою работу, можете выражать её в каком угодно эквиваленте в игре на персонажа "La Magic" )<br />
       Либо на webmoney: <strong>Z950002970194</strong>, <strong>R162994593832</strong>.<br /> Или Yandex.Деньги: <strong>41001671076486</strong>.<br />
       Если вы хотите сообщить об ошибки, то <a href="javascript:report()">нажмите сюда</a><textarea readonly="true" id="dump"></textarea>, затем скопируйте текст который вы получили, и отправьте мне его на <a href="mailto:psychotropic@xaker.ru">почту</a>
     </p>
