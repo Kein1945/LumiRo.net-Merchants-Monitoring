@@ -85,19 +85,20 @@ function report(){
   $('#dump').html(localStorage.getMercData()).slideDown();
 }
 function redrawList(){
-  $('#itemList').html('');
-  Merchants.eachMerch(function(merch){
-      var template = getTemplate('item-element', $('#item-element').html());
-      template(merch.getData(), function(html){
-          $('#itemList').html($('#itemList').html()+html)
-      })
-//      render('item-element', merch.getData(), function(html){
-//          $('#itemList').html($('#itemList').html()+html)
-//      })
-//    $('#item-element').tmpl(merch.getData(),{
-//      formatPrice: function(value){
-//        return number_format(value, {decimals: 0, thousands_sep: "."});
-//      }
-//    }).appendTo('#itemList');
-  });
+
+    var waiting_templates = 0, itemList = $('<div></div>');
+    function updateList(){
+        $('#itemList').html(itemList.html())
+        delete itemList
+    }
+    Merchants.eachMerch(function(merch){
+        var template = getTemplate('item-element', $('#item-element').html())
+        waiting_templates++
+        template(merch.getData(), function(html){
+            itemList.append($('<div></div>').html(html))
+            waiting_templates--
+            if(!waiting_templates)
+                updateList();
+        })
+    });
 }
