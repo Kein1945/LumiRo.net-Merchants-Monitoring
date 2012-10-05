@@ -1,9 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="vendors/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="vendors/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.8.10.custom.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
@@ -75,9 +78,28 @@
 <div id="wrapper" class="light-block screen-middle-block">
 <div id="SearchResources">
 <h2 class="title">LumiRo merchant monitoring<span>by Kein</span></h2>
+
+    <div class="navbar-inner navbar">
+        <ul class="nav" role="navigation">
+            <li class="dropdown">
+                <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Добавить <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" title="" id="add_merchant"><i class="icon-user"></i> Торговца</a></li>
+                    <li class="divider"></li>
+                    <li class="dropdown-submenu"><a href="#" title=""><i class="icon-briefcase"></i> Предмет</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" title="" id="add_item_sell"><i class="icon-user"></i>Продажа</a></li>
+                            <li><a href="#" title="" id="add_item_buy"><i class="icon-user"></i>Покупка</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!--<label id="notify" >Уведомления <i class="icon-notify"></i></label>-->
+    </div>
+
 <div class="control top">
-<input type="button" id="btnAddNewItem" class="button dark-item rounded" value="Добавить торговца"/>
-<label id="notify" >Уведомления <i class="icon-notify"></i></label>
+<!--<input type="button" id="btnAddNewItem" class="button dark-item rounded" value="Добавить торговца"/>-->
 </div>
 <ul id="itemList" class="sortableUl itemList">
 
@@ -88,5 +110,8 @@
     <p>С вопросами, пожеланиями, или заметками об ошибках пишите на kein.1945@gmail.com</p>
     <p><a href="" title="Подробнее о расширении" target="_blank">Подробнее</a></p>
 </div>
+
+<!-- Javascripts -->
+<script src="vendors/bootstrap/js/bootstrap-dropdown.js" type="text/javascript"></script>
 </body>
 </html>

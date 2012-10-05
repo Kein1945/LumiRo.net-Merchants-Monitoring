@@ -1,12 +1,12 @@
 $(function(){
     $('#sandbox').load(function(){
-  $('#itemList').sortable({ axis: 'y', connectWith: '.sortableUl', handle: '.drug-holder', cursor: 'move' , opacity: 0.5, delay: 200, update: function(){
-    var reorder_merch_list = [];
-    $('.li-header .merchant-name').each(function(){
-      reorder_merch_list[reorder_merch_list.length] = $(this).html();
-      Merchants.setList(reorder_merch_list);
-    })
-  } });
+        $('#itemList').sortable({ axis: 'y', connectWith: '.sortableUl', handle: '.drug-holder', cursor: 'move' , opacity: 0.5, delay: 200, update: function(){
+            var reorder_track_list = [];
+            $('.li-header .merchant-name').each(function(){
+                reorder_track_list[reorder_track_list.length] = $(this).html();
+                Tracker.updateList(reorder_track_list);
+            })
+        }});
   $('.itemlist li div.li-header a.m-set-time').live('click',function(){
     $(this).html('Обновляем...');
     mercName = $(this).parent().find('.merchant-name').html();
@@ -43,6 +43,8 @@ $(function(){
     redrawList();
   })();
   $('#btnAddNewItem').click(function(){
+      var new_track = new Merchant(merchant_name)
+      // Old version
     var time = new Date();
     var merchant_name = prompt('Введите имя торговца(если он поставлен на венд только что, вещи появятся скорее всего не сразу, а спустя некоторое время)','');
     if(merchant_name.length){
