@@ -106,6 +106,13 @@ img.middle{display: inline-block; vertical-align: middle;}
 .modifed-item td{border-style: dashed;}
 .screen-middle-block{border-width: 1px; border-style: solid; border-radius:5px;}
 .merchant-items td, .merchant-items td li{border-width: 1px;}
+[class^="icon-"],[class*=" icon-"]{
+    display: inline-block; width: 16px; height: 16px; margin-top: 1px; line-height: 16px; vertical-align: text-top;
+    background: center center no-repeat;
+}
+.icon-notify { background-image: url('Images/notification.png')}
+#notify{opacity: 0.3}
+#notify.active {opacity: 1;}
 /* ===== Colloring ===== */
 .merchant-items td, .merchant-items td li{border-color: #ccc;}
 .screen-middle-block{border-color: #f1f1f1;}

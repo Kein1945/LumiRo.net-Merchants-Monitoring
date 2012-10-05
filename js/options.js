@@ -65,12 +65,18 @@ $(function(){
       return ;
     }
   });
-  if(typeof(localStorage.notify) == 'undefined' || !localStorage.notify.length){
-    $('#notify input').attr('checked', true);
-    $('#notify input').click(function(){
-      localStorage.notify = this.checked?'':'false';
-    });
-  }
+
+        // Notification checker
+        (function (){
+            var notify = $('#notify');
+            if(localStorage.notify && localStorage.notify.length)
+                notify.addClass('active', true);
+            notify.click(function(){
+                notify.toggleClass('active')
+                localStorage.notify = notify.hasClass('active')?'active':'';
+            });
+        })();
+
     })
 });
 

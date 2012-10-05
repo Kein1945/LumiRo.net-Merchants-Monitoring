@@ -17,8 +17,8 @@
   },
   "icons": {
     "16": "Images/ico16.png",
-    "48": "Images/search.png",
-    "128": "Images/search.png"
+    "48": "Images/ico_128x128.png",
+    "128": "Images/ico_128x128.png"
   },
     "sandbox": {
         "pages": ["sandbox.html"]
@@ -26,5 +26,8 @@
     "background" : {
         "page" : "background.html"
     },
-  "options_page": "options.html"
+  "options_page": "options.html",
+    "web_accessible_resources": [
+        "Images/ico_128x128.png"
+    ]
 }

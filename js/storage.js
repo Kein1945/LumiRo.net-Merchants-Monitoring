@@ -21,20 +21,6 @@ Storage.prototype.getMercData = function(){
   return JSON.stringify(this);
 }
 
-function notify(title, text){
-  if(typeof(localStorage.notify) != 'undefined' && localStorage.notify.length){
-    return;
-  }
-  var notification = webkitNotifications.createNotification(
-    'Images/search.png',  // icon url - can be relative
-    title,  // notification title
-    text // notification body text
-  );
-
-  // Then show the notification.
-  notification.show();
-}
-
 function number_format(_number, _cfg){
   function obj_merge(obj_first, obj_second){
     var obj_return = {};
