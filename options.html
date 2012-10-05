@@ -5,13 +5,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="style.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="jquery.js"></script>
-	<script type="text/javascript" src="jquery.tmpl.min.js"></script>
 	<script type="text/javascript" src="jquery-ui-1.8.10.custom.min.js"></script>
 	<script type="text/javascript" src="index.js"></script>
 	<script type="text/javascript" src="options.js"></script>
     <script type="text/javascript" src="storage.js"></script>
     <script type="text/javascript" src="utils.js"></script>
-  <script id="item-element" type="text/x-jquery-tmpl">
+  <script id="item-element" type="text/x-template">
 
   <li>
     <div class="li-header dark-item drug-holder rounded<% if (typeof(minimized)!='undefined' && minimized) { %> minimized <% } %>">
