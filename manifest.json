@@ -26,7 +26,7 @@
     "background" : {
         "page" : "background.html"
     },
-  "options_page": "new_options.html",
+  "options_page": "options.html",
     "web_accessible_resources": [
         "Images/ico_128x128.png"
     ],

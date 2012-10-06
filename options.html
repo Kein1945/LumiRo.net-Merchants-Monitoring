@@ -1,117 +1,191 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">-->
 <html xmlns="http://www.w3.org/1999/html">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link href="style.css" rel="stylesheet" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="vendors/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="vendors/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
-	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/jquery-ui-1.8.10.custom.min.js"></script>
-	<script type="text/javascript" src="js/index.js"></script>
-	<script type="text/javascript" src="js/options.js"></script>
-    <script type="text/javascript" src="js/storage.js"></script>
-    <script type="text/javascript" src="js/utils.js"></script>
-  <script id="item-element" type="text/x-template">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <!--<script type="text/javascript" src="js/jquery-ui-1.8.10.custom.min.js"></script>-->
+    <!--<script type="text/javascript" src="js/options.js"></script>-->
+    <!--<script type="text/javascript" src="js/storage.js"></script>-->
+    <!--<script type="text/javascript" src="js/utils.js"></script>-->
+    <style type="text/css">
+        body {
+            position: relative;
+            padding-top: 40px;
+            font-family: Georgia;
+        }
+        .popover .table { margin-bottom: 0; }
 
-  <li>
-    <div class="li-header dark-item drug-holder rounded<% if (typeof(minimized)!='undefined' && minimized) { %> minimized <% } %>">
-      <a class="refresh" href="#" title="Переставить"><img src="Images/refresh.png" class="middle"/></a>
-      <span class="merchant-name"><%=name%></span>
-      <% if (profit) { %><span class="profit">&nbsp;+<% print(formatPrice(profit))%></span><% } %>
-      <a class="remove right" href="#" title="Удалить торговца"><img src="Images/cross.png" class="middle"/></a>
-      <a class="m-set-time right" href="#"><%=refreshed%></a>
-    </div>
-    <table class="merchant-items">
-      <% _.each(items, function(item){ %>
-      <tr class="rounded
-      <% if (item.count != item.nowcount) { %>
-        <%if (item.nowcount) { %>
-         modifed half-item
-        <% } else { %>
-         sold sold-item
-        <% } %> modifed-item
-      <%} else { %>
-        full-item
-      <% } %>">
-        <td class="pico min-wid"><div style="<%=item.style%>"></div></td>
-          <td class="attr min-wid">
-              <% if (item.id!=12233 && item.attr.length) { %>
-              <div class="inf infico">&nbsp;
-                  <ul class="datah">
-                      <% _.each(item.attr, function(value){ %>
-                      <li class="rounded"><%=value%></li>
-                      <% }); %>
-                  </ul>
-              </div>
-              <% } else { %>
-              <div class="inf">&nbsp;</div>
-              <% } %>
-          </td>
-          <td><% if (item.refain) { %>
-              <span class="refain"><%=item.refain%></span>
-              <% } %>
-              <% if (item.id==12233 && item.attr.length) { %>
-                  <% _.each(item.attr, function(value){ %>
-                  <em><%=value%></em>
-                  <% }); %>
-              <% } %>
-              <a href="http://market.lumiro.net/whosell.php?s=<%=item.id%>&field=price&order=asc" title="Кто еще продает"><%=item.name%></a><a href="http://www.poring.ru/items/<%=item.id%>.html" target="_blank" class="external" target="_blank" title="Poring.ru">&nbsp;</a></td>
-          <td class="price min-wid text-right"><%=item.price%></td>
-          <td class="count min-wid text-center">
-              <% if (item.count != item.nowcount && item.nowcount) { %>
-              <span class="now-count"><%=item.nowcount%></span>/<span class="start-count"><%=item.count%></span>
-              <% } else { %>
-              <%=item.nowcount%>
-              <% } %>
-          </td>
-        <td class="profit min-wid text-right"><%=item.profit%></td>
-      </tr>
-      <% }) %>
-    </table>
-  </li>
-  </script>
+        #merchant-list-sidebar-container ul.nav { display: block; width: 240px }
+        #merchant-list-sidebar-container .divider {background-color:#999}
+
+        .hover-me{
+            cursor: pointer; color: #0088cc;
+        }
+        .item-image {width: 24px; height: 24px; display: inline-block; vertical-align: top;}
+        .muted .item-image { opacity: 0.3; }
+        .item-image { margin-right: 10px;}
+        .row .items-list { margin: 0 20px 0 40px; }
+        .items-list .progress {margin: 3px 5px 0 45px; height: 4px }
+        .items-list > li {padding: 7px 10px 13px 10px;}
+        .items-list > li .profit { margin-right: 45px}
+        .items-list > li .count{ opacity: 0.1}
+        .items-list > li:hover .count{ opacity: 1}
+        .items-list > li .progress{ opacity: 0.5}
+        .items-list > li:hover .progress{ opacity: 1}
+        .price { color:#468847 }
+        .merchant.row{ padding-top:30px}
+        .merchant.row h5 {padding-left: 10px;}
+        .merchant.row .header { border-bottom: 1px solid #999; }
+        .merchant.row .header h3 { color: #333 }
+        .merchant.row .header .nav { margin-top: 10px }
+        .merchant.row .profit { margin-top: 4px; }
+        #merchant-list { margin-top: -40px; padding:20px}
+        #merchant-list-sidebar-container { padding-top: 10px; }
+        #merchant-tab { padding-bottom: 80px; }
+    </style>
 </head>
 <body>
 <iframe id="sandbox" src="sandbox.html" style="display:none"></iframe>
-<div id="wrapper" class="light-block screen-middle-block">
-<div id="SearchResources">
-<h2 class="title">LumiRo merchant monitoring<span>by Kein</span></h2>
-
-    <div class="navbar-inner navbar">
-        <ul class="nav" role="navigation">
-            <li class="dropdown">
-                <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Добавить <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#" title="" id="add_merchant"><i class="icon-user"></i> Торговца</a></li>
-                    <li class="divider"></li>
-                    <li class="dropdown-submenu"><a href="#" title=""><i class="icon-briefcase"></i> Предмет</a>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active"><a href="#" data-tab-id="merchant-tab" class="tab-switch"><i class="icon-user icon-white"></i> Merchants</a></li>
+                    <li><a href="#" data-tab-id="buy-tab" class="tab-switch"><i class="icon-gift icon-white"></i> Покупка</a></li>
+                    <li><a href="#" data-tab-id="sell-tab" class="tab-switch"><i class="icon-share-alt icon-white"></i> Продажа</a></li>
+                    <li><a href="#" id="refresh_data"><i class="icon-refresh icon-white"></i> Обновить <sup id="last-update-time"></sup></a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Добавить <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#" title="" id="add_item_sell"><i class="icon-user"></i>Продажа</a></li>
-                            <li><a href="#" title="" id="add_item_buy"><i class="icon-user"></i>Покупка</a></li>
+                            <li><a href="#prompt" id="add_merchant"><i class="icon-user"></i> Торговца</a></li>
+                            <li class="dropdown-submenu"><a href="#" title=""><i class="icon-briefcase"></i> Предмет</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" ><i class="icon-gift"></i> Покупка</a></li>
+                                    <li><a href="#" ><i class="icon-share-alt"></i> Продажа</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#options">Настройки <i class="icon-cog icon-white"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container tab-pane" id="merchant-tab">
+    <div class="row">
+        <div class="span3" id="merchant-list-sidebar-container">
+            <ul class="nav nav-list affix" id="merchant-list-sidebar">
+                <li class="active"><a href="#">Hitler <sup class="">+ 17.520.000</sup></a></li>
+                <li><a href="#">Zeouts</a></li>
+                <li><a href="#">Впарень <sup class="">+ 1.120.000</sup></a></li>
+            </ul>
+        </div>
+        <div class="span9">
+            <section id="merchant-list" class="container-fluid" data-spy="scroll" data-target="#merchant-list-sidebar-container">
+            </section>
+        </div>
+    </div>
+</div>
+<!-- Javascripts -->
+<script src="vendors/bootstrap/js/bootstrap-dropdown.js" type="text/javascript"></script>
+<script src="vendors/bootstrap/js/bootstrap-tooltip.js" type="text/javascript"></script>
+<script src="vendors/bootstrap/js/bootstrap-popover.js" type="text/javascript"></script>
+<script src="vendors/bootstrap/js/bootstrap-scrollspy.js" type="text/javascript"></script>
+<script src="vendors/bootstrap/js/bootstrap-modal.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="js/storage.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+<script src="js/options.js" type="text/javascript"></script>
+<script src="js/lumi/market.js" type="text/javascript"></script>
+<script src="js/lumi/tracker.js" type="text/javascript"></script>
+<script src="js/underscore-min.js" type="text/javascript"></script>
+
+<script id="item-merchant-sidebar" type="text/x-template">
+    <a href="#merc_<%=name%>"><%=name%>
+        <!--TODO: items not sould count-->
+        <% if (items.sell.length > 0) {%><sub>[<%=items.sell.length%>]</sub><% } %>
+        <% if (profit.summary > 0) { %><span class="profit pull-right price" data-profit="<%=profit.summary%>">+ <%print(formatPrice(profit.summary))%></span><% } %></a>
+</script>
+<script id="item-merchant" type="text/x-template">
+    <div class="merchant row" id="merc_<%=name%>">
+        <div class="navbar ">
+            <div class="header clearfix">
+                <ul class="nav nav-pills pull-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><% print((new Date(update)).getHours()+':'+(new Date(update)).getMinutes())%> <b class="caret"></b></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a tabindex="-1" href="#" class="refresh_merchant" data-name="<%=name%>"><i class="icon-refresh"></i> Переставить</a></li>
+                            <li><a tabindex="-1" href="#" class="remove_merchant" data-name="<%=name%>"><i class="icon-remove"></i> Удалить</a></li>
                         </ul>
                     </li>
                 </ul>
-            </li>
-        </ul>
-        <!--<label id="notify" >Уведомления <i class="icon-notify"></i></label>-->
+                <h3><%=name%></h3>
+            </div>
+        </div>
+        <div>
+            <% if (items.sell.length){%>
+            <h5>Продажа<% if (profit.summary > 0) { %> <sup class="price">+ <%print(formatPrice(profit.summary))%></sup><% } %></h5>
+            <ul class="unstyled items-list">
+                <% _.each(items.sell, function(item){ %>
+                <li>
+                    <div>
+                        <span<% if (item.amount==0) { %> class="muted"<% } %>>
+                        <!--<span style="<%=item.style%>" class="item-image"></span>-->
+                        <span class="item-image"><img src="http://file5.ratemyserver.net/items/large/<% if(/\sCard$/.test(item.name)){%>card<%} else { print(item.id)}%>.gif"/></span>
+                        <% if (item.refain) { %>
+                        <sup><%=item.refain%></sup>
+                        <% } %>
+                        <span><%=item.name%></span> <% if (item.id!=12233 && (item.features.length || item.slots)){ %><sub<% if (item.id!=12233 && item.features.length) { %> class="cards hover-me"<% } %>>[<% if (item.id!=12233 && item.features.length) { %><%=item.features.length%>/<% } %><%=item.slots%>]</sub><%}%>
+
+                        <% if (item.id!=12233 && item.features.length) { %>
+                        <div class="hide">
+                            <table class="table table-striped">
+                                <tbody>
+                                <% _.each(item.features, function(feature){ %>
+                                <!--TODO: Use card id-->
+                                <tr><td><img src="http://file5.ratemyserver.net/items/small/<% if(/\sCard$/.test(feature.name)){%>card<%} else { print(feature.id)}%>.gif"/> <%=feature.name%></td></tr>
+                                <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } %>
+                        </span>
+
+                            <span class="pull-right<% if (item.amount==0) { %> muted<% } %><% if (item.count > 1) { %> hover-me" rel="tooltip" data-original-title="<% if (item.count != item.amount && item.amount > 0) { %>
+                            Еще <%=item.amount%> из <%=item.count%>
+                            <% } else { %>Всего <% if(item.amount < 1) {%>было <%}%><%=item.count%><% } %><% } %>"><%print(formatPrice(item.price))%></span>
+                        <% if (item.amount < item.count) { %><span class="pull-right profit badge badge-success">+ <%print(formatPrice(item.price*(item.count-item.amount)))%></span>
+                        <!--<span class="pull-right price">+ <%print(formatPrice(item.profit))%></span>-->
+                        <% } %>
+                    </div>
+                    <% if (item.count != 1) { %>
+                    <% if (item.count != item.amount && item.amount > 0) { %>
+                    <div class="progress complete" rel="tooltip" data-original-title="Продано <%print(item.count - item.amount)%> из <%=item.count%>">
+                        <div class="bar bar-success" style="width:<%print(100 - 100*item.amount/item.count)%>%"></div>
+                        <div class="bar bar-info" style="width:<%print(100*item.amount/item.count)%>%"></div>
+                    </div>
+                    <% } %>
+
+                    <% } %>
+
+
+                </li>
+                <% }) %>
+            </ul>
+            <% } %>
+        </div>
     </div>
+</script>
 
-<div class="control top">
-<!--<input type="button" id="btnAddNewItem" class="button dark-item rounded" value="Добавить торговца"/>-->
-</div>
-<ul id="itemList" class="sortableUl itemList">
-
-</ul>
-</div>
-</div>
-<div id="info" class="light-block screen-middle-block">
-    <p>С вопросами, пожеланиями, или заметками об ошибках пишите на kein.1945@gmail.com</p>
-    <p><a href="" title="Подробнее о расширении" target="_blank">Подробнее</a></p>
-</div>
-
-<!-- Javascripts -->
-<script src="vendors/bootstrap/js/bootstrap-dropdown.js" type="text/javascript"></script>
 </body>
 </html>

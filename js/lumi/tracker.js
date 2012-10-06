@@ -1,129 +1,133 @@
 var Tracker = (function(){
-
-    var storage = (function(){
-        var list_prefix = 'merchants';
-        return {
-            loadTracks: function(){
-                var list = localStorage.getObject(list_prefix);
-                return list?list:[];
-            }
-            , loadMerchantData: function(name){
-                return localStorage.getObject('md_'+name);
-            }
-            , updateTrackNames: function(tracking_names){
-                localStorage.setObject(list_prefix, tracking_names);
-            }
-        }
-    })();
-
     return {
-        list: function(){
-            var track_items = storage.loadTracks()
-                , tracking_list = [];
-            _.each(track_items, function(item){
-                merchants[merchants.length] = new Merchant( storage.loadMerchantData(name) )
+        listMerchants: function(){
+            var merchant_name = localStorage.getObject('merchants_list',[])
+                , merchants_list = [];
+            _.each(merchant_name, function(name){
+                var merchant = new Merchant( name )
+                merchants_list[merchants_list.length] = merchant
             })
-            return merchants;
+            return merchants_list;
         }
-        , updateList: function(tracking_items){
-            storage.updateTrackNames(tracking_items);
+        , updateMerchantsList: function(tracking_items){
+            localStorage.setObject('merchants_list', tracking_items)
         }
     }
 })();
 
-var Merchant = (function(name){
-    var self = this;
-    Merc.MercData = data;
-    Merc.MercData.timed_profit = data.timed_profit?data.timed_profit:0;
-    Merc.name = data.name;
-    this.getData = function(){
-        return Merc.MercData;
-    }
+var Merchant = function(name){
+    var self = this
+        , getDefaultData = function(name){ return { items: { sell: [], buy: []}, create: (new Date()).toString(), update: (new Date()).toString(), profit: {summary: 0, last: 0}, name: name, isNew: true } }
+        , loadInitData = function(name){
+            data = getDefaultData(name)
+            data.items.sell = market.load.buy(name, function(){
+
+            })
+        }
+
+    self.data = localStorage.getObject("Merchant_"+name, getDefaultData(name));
+
     this.renew = function(callback){
-        Merc.MercData = {name: Merc.name};
-        Merc.update(callback?callback:function(){});
+        self.data = getDefaultData(self.data.name);
+        self.update(callback?callback:function(){});
     };
     this.update = function(update_callback){
-        Merchants.loadData(Merc.name, function(new_lst){
-            old_lst = Merc.getItems();
-
-            var items = [];
-            var profit = 0;
-
-            if(new_lst.length){
-                if(!old_lst.length){
-                    old_lst = new_lst;
-                } else {
-                    oichecked = new Array(); ichecked = new Array();
-                    for(i=0; i<old_lst.length; i++){
-                        ohash = itemHash(old_lst[i]);
-                        for(j=0; j<new_lst.length; j++){
-                            nhash = itemHash(new_lst[j]);
-                            if(!oichecked[ohash+i] && !ichecked[nhash+j] && nhash == ohash){
-                                oichecked[ohash+i] = true; ichecked[nhash+j] = true;
-                                old_lst[i].nowcount = new_lst[j].count;
-                            }
-                        }
-                    }
-
-                    for(i=0; i<old_lst.length; i++){
-                        ohash = itemHash(old_lst[i]);
-                        if(!oichecked[ohash+i]){
-                            old_lst[i].nowcount = 0;
-                        }
-                    }
-
-                    // Проверка, переставляли ли магазин?
-                    for(j=0; j<new_lst.length; j++){
-                        nhash = itemHash(new_lst[j]);
-                        for(i=0; i<old_lst.length; i++){
-                            var found = false;
-                            ohash = itemHash(old_lst[i]);
-                            if(nhash == ohash){
-                                found = true; break;
-                            }
-                        }
-                        if(!found){
-                            old_lst = new_lst;
-                            Merc.MercData.timed_profit = 0;
-                            Merc.MercData.profit = 0;
-                            notify(Merc.name, 'Новый венд. Данные торговца обновленны.');
-                            break;
-                        }
-                    }
-                }
-                for(i=0; i<old_lst.length; i++){
-                    if(old_lst[i].owner == Merc.name){
-                        old_lst[i].profit = (old_lst[i].count - old_lst[i].nowcount) * old_lst[i].real_price;
-                        items[items.length] = old_lst[i];
-                        profit += old_lst[i].profit;
-                    }
-                }
-            }
-            var time = new Date();
-            Merc.MercData.items = items;
-            Merc.MercData.profit = profit;
-            if(Merc.MercData.timed_profit < Merc.MercData.profit){
-                notify(Merc.name, '+ '+number_format(Merc.MercData.profit - Merc.MercData.timed_profit, {decimals: 0, thousands_sep: "."}));
-                Merc.MercData.timed_profit = Merc.MercData.profit;
-            }
-            var hours=time.getHours();
-            var minutes=time.getMinutes();
-            if(minutes<10) minutes='0'+minutes;
-            Merc.MercData.refreshed = hours+':'+minutes;
-            Merchants.persist(Merc);
+        market.load.sell(self.data.name, function(new_items){
+            self.proceedSellData(new_items)
+            self.data.update = (new Date()).toString()
+            self.save();
             update_callback?update_callback():false;
         });
     };
-    this.getItems = function(){
-        return Merc.MercData.items?Merc.MercData.items:[];
-    };
-    this.eachItem = function(func){
-        var items = self.getItems();
-        for(i in items){
-            func(i, items[i]);
-        }
-    };
+    this.remove = function(){
+        localStorage.removeItem("Merchant_"+this.data.name);
+        var merchants = _.filter(Tracker.listMerchants(), function(merchant){
+            return merchant.data.name != self.data.name;
+        });
+        Tracker.updateMerchantsList(_.map(merchants, function(m){return m.data.name}))
+    }
     //refreshed: time.getHours()+':'+time.getMinutes(),
     //time: time.getHours()+':'+time.getMinutes()+' '+time.getDate()+'/'+time.getMonth(),
-})();
+};
+
+Merchant.prototype.proceedSellData = function(new_items){
+    var items = []
+        , profit = 0
+        , old_items = this.data.items.sell
+        , flag = {isReset: false, isNewVend: false, isFall: false}
+        , getItemHash = function(item){
+            return 'hash' + item.id + item.refine + ':' + item.price + '+' + item.slots + '/' + _.reduce(item.features,function(memo, feature){ return '|' + features.id },'|');
+        };
+    if(0 < old_items.length){
+        if(0 < new_items.length){ // Предметы есть
+
+            var old_item_checked = new Array(); // Предметы проверенные в старом списке
+            var new_item_checked = new Array(); // Предметы проверенные в новом списке
+            // Ключ каждого массива это хэш предмета и его номер.
+            // Блок поиска предметов которые у есть как в старом так и в новом списке
+            for(var i= 0; i<old_items.length; i++){
+                var old_item_hash = getItemHash(old_items[i])
+                for(var j= 0; j<new_items.length; j++){
+                    var new_item_hash = getItemHash(new_items[j])
+                    if(!old_item_checked[old_item_hash+i] // Мы не проверяли предмет
+                        && !new_item_checked[new_item_hash+j]
+                        // Хэши предметов совпадают - наверное один и тот же
+                        && new_item_hash == old_item_hash){
+                        old_item_checked[old_item_hash+i] = true; new_item_checked[new_item_hash+j] = true;
+                        old_items[i].amount = new_items[j].count;
+                    }
+                }
+            }
+            // Проверям проданные вещи, которых не оказалось в новом списке
+            for(var i=0; i<old_items.length; i++){
+                old_item_hash = getItemHash(old_items[i]);
+                if(!old_item_checked[old_item_hash+i]){
+                    old_items[i].amount = 0; // значит их осталось 0 штук ;)
+                }
+            }
+            items = old_items;
+
+            // Подсчитаем прибыль
+            for(var i=0; i<items.length; i++){
+                var item = items[i];
+                profit += (item.count - item.amount) * item.price
+            }
+
+            // Проверяем наличие новых предметов которых нет в старом венде
+            for(var j=0; j<new_items.length; j++){
+                var new_item_hash = getItemHash(new_items[j]);
+                for(var i=0; i<old_items.length; i++){
+                    var found = false
+                        , old_item_hash = getItemHash(old_items[i]);
+                    if(new_item_hash == old_item_hash){
+                        found = true; break;
+                    }
+                }
+                if(!found){
+                    flag.isNewVend = true
+                    this.data.profit.summary = 0
+                    items = new_items
+                    notify(this.data.name, 'Новый венд. Данные торговца обновленны.');
+                    break;
+                }
+            }
+
+        } else { // Наш венд слетел
+            items = []
+            flag.isFall = true;
+        }
+    } else {// Если раньше у нас не было новых вещей
+        flag.isNewVend = !!(items = new_items).length;
+    }
+    this.data.items.sell = items;
+    this.data.profit.last = profit - this.data.profit.summary;
+    this.data.profit.summary = profit;
+    // profit > 0 && notify(self.data.name, '+ '+number_format(profit, {decimals: 0, thousands_sep: "."}));
+}
+Merchant.prototype.save = function(){
+    if(this.data.isNew){
+        this.data.isNew = false;
+    }
+    localStorage.setObject('Merchant_'+this.data.name, this.data)
+    localStorage.setObject('lastUpdate', (new Date()).toString())
+}
