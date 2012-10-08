@@ -113,7 +113,7 @@
 <script id="item-merchant-sidebar" type="text/x-template">
     <a href="#merc_<%=name%>"><%=name%>
         <!--TODO: items not sould count-->
-        <% if (items.sell.length > 0) {%><sub>[<%=items.sell.length%>]</sub><% } %>
+        <% if (items.sell.length > 0 || items.buy.length > 0) {%><sub>[<%=items.sell.length%>/<%=items.buy.length%>]</sub><% } %>
         <% if (profit.summary > 0) { %><span class="profit pull-right price" data-profit="<%=profit.summary%>">+ <%print(formatPrice(profit.summary))%></span><% } %></a>
 </script>
 <script id="item-merchant" type="text/x-template">
@@ -184,6 +184,45 @@
             </ul>
             <% } %>
         </div>
+        <!-- Buy -->
+
+        <div>
+            <% if (items.buy.length){%>
+            <h5>Покупка<% if (lose.summary > 0) { %> <sup class="price">+ <%print(formatPrice(lose.summary))%></sup><% } %></h5>
+            <ul class="unstyled items-list">
+                <% _.each(items.buy, function(item){ %>
+                <li>
+                    <div>
+                        <span<% if (item.amount==0) { %> class="muted"<% } %>>
+                        <span class="item-image"><img src="http://file5.ratemyserver.net/items/large/<% if(/\sCard$/.test(item.name)){%>card<%} else { print(item.id)}%>.gif"/></span>
+                        <span><%=item.name%></span>
+
+                        </span>
+
+                            <span class="pull-right<% if (item.amount==0) { %> muted<% } %><% if (item.count > 1) { %> hover-me" rel="tooltip" data-original-title="<% if (item.count != item.amount && item.amount > 0) { %>
+                            Приобретено <%print(item.count-item.amount)%> из <%=item.count%>
+                            <% } else { %>Еще <%=item.count%><% } %><% } %>"><%print(formatPrice(item.price))%></span>
+                        <% if (item.amount < item.count) { %><span class="pull-right profit badge badge-success">+ <%print(item.count-item.amount)%></span>
+                        <% } %><% if (item.amount < item.count) { %><span class="pull-right profit badge badge-warning">- <%print(formatPrice(item.price*(item.count-item.amount)))%></span>
+                        <% } %>
+                    </div>
+                    <% if (item.count != 1) { %>
+                    <% if (item.count != item.amount && item.amount > 0) { %>
+                    <div class="progress complete" rel="tooltip" data-original-title="Приобретено <%print(item.count - item.amount)%> из <%=item.count%>">
+                        <div class="bar bar-success" style="width:<%print(100 - 100*item.amount/item.count)%>%"></div>
+                        <div class="bar bar-info" style="width:<%print(100*item.amount/item.count)%>%"></div>
+                    </div>
+                    <% } %>
+
+                    <% } %>
+
+
+                </li>
+                <% }) %>
+            </ul>
+            <% } %>
+        </div>
+
     </div>
 </script>
 

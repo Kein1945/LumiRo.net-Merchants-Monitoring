@@ -6,7 +6,8 @@ var market = (function(){
         , parser = {
             sell : function(data){
                 var ResultMatchRegExp = /tr\sclass="line(?:[\s\S]*?)div\sstyle="([\s\S]*?)"(?:[\s\S]*?)<small>([\d\+]*)<\/small>(?:[\s\S]*?)javascript:perf\('([\d]+)'\);">([^<]+?)<\/a>([\s\S]*?)<\/td>(?:[\s\S]*?)class="value">([\s\S]*?)class="value"\salign="right">([^<]+)<(?:[\s\S]*?)align="center">([^<]+)(?:[\s\S]*?)class="trader(?:[\s\S]*?)<a[^>]+>([^<]+)/gim
-                    , items = [];
+                    , items = []
+                    , re;
                 while( (re = ResultMatchRegExp.exec(data)) ){
                     features = [];
                     AditionalsString = re[6].trim();
@@ -33,7 +34,23 @@ var market = (function(){
                         , owner: re[9]
                     };
                 }
-                return items;
+                return items
+            }
+            , buy : function(data){
+                var ResultMatchRegExp = /tr\sclass="line(?:[\s\S]*?)div\sstyle="([\s\S]*?)"(?:[\s\S]*?)javascript:perf\('([\d]+)'\);">([^<]+?)<\/a>([\s\S]*?)<\/td>(?:[\s\S]*?)class="value"\salign="right">([^<]+)<(?:[\s\S]*?)align="center">([^<]+)(?:[\s\S]*?)class="trader(?:[\s\S]*?)<a[^>]+>([^<]+)/gim
+                    , items = []
+                    , re;
+
+                while( (re = ResultMatchRegExp.exec(data)) ){
+                    items[items.length] = {
+                        id: re[2]
+                        , name: re[3]
+                        , price: re[5].replace(/\./g,'')
+                        , count: re[6]
+                        , owner: re[7]
+                    }
+                }
+                return items
             }
         }
 
