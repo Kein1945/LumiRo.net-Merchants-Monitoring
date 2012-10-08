@@ -159,7 +159,7 @@ Merchant.prototype.proceedBuyData = function(new_items){
                         && !new_item_checked[new_item_hash+j] // Мы не проверяли предмет
                         // Хэши предметов совпадают - наверное один и тот же
                         && new_item_hash == old_item_hash
-                        && old_items[i].count >= new_items[j].count){
+                        && old_items[i].amount >= new_items[j].count){
                         old_item_checked[old_item_hash+i] = true;
                         new_item_checked[old_item_hash+j] = true;
                         old_items[i].amount = new_items[j].count;
