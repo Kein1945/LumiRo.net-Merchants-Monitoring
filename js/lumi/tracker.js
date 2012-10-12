@@ -27,22 +27,31 @@ var Merchant = function(name){
     };
     this.update = function(update_callback){
         var call_waiting = 0
+            , sell_result = {} , buy_result = {}
             , callback_func = function(){
-            call_waiting--
-            if(!call_waiting){
-                self.data.update = (new Date()).toString()
-                self.save();
-                update_callback?update_callback():false
+                call_waiting--
+                if(call_waiting < 1){
+                    self.data.items = {sell: sell_result.items, buy: buy_result.items}
+                    if ( sell_result.flags.isNewVend || buy_result.flags.isNewVend ){
+
+                    } else {
+                        self.calcProfit()
+                    }
+                    self.data.update = (new Date()).toString()
+                    self.save();
+                    update_callback?update_callback():false
+                }
             }
-        }
         call_waiting ++
         market.load.sell(self.data.name, function(new_items){
-            self.proceedSellData(new_items)
+            //self.proceedSellData(new_items)
+            sell_result = self.compareLists(self.data.items.sell, new_items);
             callback_func()
         });
         call_waiting ++
         market.load.buy(self.data.name, function(new_items){
-            self.proceedBuyData(new_items)
+            //self.proceedBuyData(new_items)
+            buy_result = self.compareLists(self.data.items.buy, new_items);
             callback_func()
         });
     };
@@ -56,6 +65,15 @@ var Merchant = function(name){
     //refreshed: time.getHours()+':'+time.getMinutes(),
     //time: time.getHours()+':'+time.getMinutes()+' '+time.getDate()+'/'+time.getMonth(),
 };
+
+Merchant.prototype.calcProfit = function(){
+    var profit = 0;
+    for(var i= 0; i<this.data.items.sell.length; i++){
+        var item = this.data.items.sell[i];
+        profit += (item.count - item.amount)* item.price;
+    }
+    this.data.profit.summary = profit;
+}
 
 Merchant.prototype.proceedSellData = function(new_items){
     var items = []
@@ -211,6 +229,72 @@ Merchant.prototype.proceedBuyData = function(new_items){
     this.data.lose.last = profit - this.data.lose.summary;
     this.data.lose.summary = profit;
     return flag;
+}
+
+/**
+ * Функция сравнения список товаров, решает что изменилось
+ * */
+Merchant.prototype.compareLists = function(old_items, new_items, getItemHash){
+    var items = []
+        , flags = {isNewVend: false, isFall: false};
+    if(old_items.length > 0){ // Если есть старые предметы
+        if(new_items.length > 0){ // Новые предметы есть
+
+            var old_item_checked = new Array(); // Предметы проверенные в старом списке и не участвующие в сравнении
+            var new_item_checked = new Array(); // Предметы проверенные в новом списке и не участвующие в сравнении
+            // Ключ каждого массива это хэш предмета и его номер.
+            // Блок поиска предметов которые у есть как в старом так и в новом списке
+            for(var i= 0; i<old_items.length; i++){
+                var old_item_hash = getItemHash(old_items[i])
+                for(var j= 0; j<new_items.length; j++){
+                    var new_item_hash = getItemHash(new_items[j])
+                    if(!old_item_checked[old_item_hash+'|'+i] // Мы не проверяли этот старый предмет
+                        && !new_item_checked[new_item_hash+'|'+j] // Мы не проверяли этот новый предмет
+                        // Хэши предметов совпадают - наверное один и тот же
+                        && new_item_hash == old_item_hash
+                        // Количество в старом магазине должно быть быть больше или равно количеству в новом
+                        && ( !old_items[i].amount || old_items[i].amount >= new_items[j].count) ){
+                            old_item_checked[old_item_hash+'|'+i] = true;
+                            new_item_checked[old_item_hash+'|'+j] = true;
+                            old_items[i].amount = new_items[j].count;
+                    }
+                }
+            }
+            // Проверям проданные вещи, которых не оказалось в новом списке
+            for(var i=0; i<old_items.length; i++){
+                old_item_hash = getItemHash(old_items[i]);
+                if(!old_item_checked[old_item_hash+'|'+i]){
+                    old_items[i].amount = 0; // значит их осталось 0 штук ;)
+                }
+            }
+            items = old_items;
+
+            // Проверяем наличие новых предметов которых нет в старом венде
+            for(var j=0; j<new_items.length; j++){
+                var found = false
+                    , new_item_hash = getItemHash(new_items[j]);
+                for(var i=0; i<old_items.length; i++){
+                    var old_item_hash = getItemHash(old_items[i]);
+                    if(new_item_hash == old_item_hash){
+                        found = true; break;
+                    }
+                }
+                if(found){
+                    flags.isNewVend = true
+                    items = new_items
+                    break;
+                }
+            }
+
+        } else { // Старые вещи есть, новых совсем нет
+            items = []
+            flags.isFall = true;
+        }
+    } else {// Если раньше у нас не было вещей
+        flags.isNewVend = true;
+        items = new_items;
+    }
+    return {items: items, flags: flags};
 }
 
 Merchant.prototype.save = function(){
