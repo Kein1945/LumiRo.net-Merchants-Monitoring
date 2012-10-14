@@ -30,29 +30,26 @@ var app = (function(){
         , bindRefresh = function(){
 
             (function(){
-                setTimeout(arguments.callee, 4*60000)
-                redrawList()
-                app.updateInterface()
+                setTimeout(redrawMerchantsList, 4*60000)
+                redrawMerchantsList()
             })();
             $('#refresh_data').bind('click', function(){
-                updateData(function(){
-                    app.updateInterface()
-                })
+                updateData(redrawMerchantsList)
             })
         }
         , bindMerchantActions = function(){
             $('a.refresh_merchant').live('click', function(){
                 var merc = new Merchant($(this).data('name'))
                 merc.renew(function(){
-                    redrawList()
+                    redrawMerchantsList()
                 })
             })
             $('a.remove_merchant').live('click', function(){
                 var merc = new Merchant($(this).data('name'))
                 merc.remove()
-                redrawList()
+                redrawMerchantsList()
             })
-        } // Вреднота
+        }
         , bindAddMerchant = function(){
             $('#add_merchant').click(function(){
                 var merchants = Tracker.listMerchants()
@@ -71,11 +68,16 @@ var app = (function(){
             })
         }
         , updateData = function(callback_func){
-            var merchants = Tracker.listMerchants();
+            var merchants = Tracker.listMerchants()
+                , callbacks_count = 0
+                , callback = function(){
+                    callbacks_count--
+                    if(callbacks_count > 0) return false
+                    callback_func?callback_func():false
+                };
             _.each(merchants, function(merchant){
-                merchant.update(function(){
-                    updateRefreshTimer()
-                });
+                callbacks_count++;
+                merchant.update(callback);
             })
         }
         , updateRefreshTimer = function(){
@@ -84,6 +86,34 @@ var app = (function(){
                 var update = new Date()
                 $('#last-update-time').html(update.getHours()+':'+update.getMinutes())
             }
+        }, redrawMerchantsList = function(){
+            var waiting_templates = 0, itemList = $('<div></div>'), itemListSidebar = $('<div></div>');
+            var updateMerchantsList = function(){
+                $('#merchant-list').html(itemList.html())
+                $('#merchant-list-sidebar').html(itemListSidebar.html())
+                delete itemList;
+                delete itemListSidebar;
+                app.updateInterface()
+            }
+            var merchants = Tracker.listMerchants();
+            _.each(merchants, function(merch){
+                var template = getTemplate('item-merchant', $('#item-merchant').html())
+                var templateSidebar = getTemplate('item-merchant-sidebar', $('#item-merchant-sidebar').html())
+                waiting_templates++;
+                template(merch.data, function(html){
+                    itemList.append($('<div></div>').html(html))
+                    waiting_templates--
+                    if(!waiting_templates)
+                        updateMerchantsList();
+                })
+                waiting_templates++
+                templateSidebar(merch.data, function(html){
+                    itemListSidebar.append($('<li></li>').html(html))
+                    waiting_templates--
+                    if(!waiting_templates)
+                        updateMerchantsList();
+                })
+            })
         }
     return {
         init: function(){
@@ -111,33 +141,7 @@ $(function(){
 
 
 })
-function redrawList(){
+function redrawList(onRedraw){
 
-    var waiting_templates = 0, itemList = $('<div></div>'), itemListSidebar = $('<div></div>');
-    var updateMerchantsList = function(){
-        $('#merchant-list').html(itemList.html())
-        $('#merchant-list-sidebar').html(itemListSidebar.html())
-        delete itemList;
-        delete itemListSidebar;
-        app.updateInterface()
-    }
-    var merchants = Tracker.listMerchants();
-    _.each(merchants, function(merch){
-        var template = getTemplate('item-merchant', $('#item-merchant').html())
-        var templateSidebar = getTemplate('item-merchant-sidebar', $('#item-merchant-sidebar').html())
-        waiting_templates++;
-        template(merch.data, function(html){
-            itemList.append($('<div></div>').html(html))
-            waiting_templates--
-            if(!waiting_templates)
-                updateMerchantsList();
-        })
-        waiting_templates++
-        templateSidebar(merch.data, function(html){
-            itemListSidebar.append($('<li></li>').html(html))
-            waiting_templates--
-            if(!waiting_templates)
-                updateMerchantsList();
-        })
-    })
+
 }
