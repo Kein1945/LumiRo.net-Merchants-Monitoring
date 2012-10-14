@@ -94,7 +94,7 @@ Merchant.prototype.compareLists = function(old_items, new_items, getItemHash){
                     // Хэши предметов совпадают - наверное один и тот же
                     && new_item_hash == old_item_hash
                     // Количество в старом магазине должно быть быть больше или равно количеству в новом
-                    && (old_items[i].amount?old_items[i].amount:old_items[i].count) >= new_items[j].count ){
+                    && parseInt(old_items[i].amount?old_items[i].amount:old_items[i].count) >= parseInt(new_items[j].count) ){
                         is_updated = true
                         old_item_checked[old_item_hash+'|'+i] = true
                         new_item_checked[old_item_hash+'|'+j] = true
