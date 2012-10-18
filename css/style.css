@@ -8,9 +8,7 @@ body {
 #merchant-list-sidebar-container ul.nav { display: block; width: 240px }
 #merchant-list-sidebar-container .divider {background-color:#999}
 
-.hover-me{
-    cursor: pointer; color: #0088cc;
-}
+.hover-me{ cursor: pointer; color: #0088cc; }
 .item-image {width: 24px; height: 24px; display: inline-block; vertical-align: top;}
 .muted .item-image { opacity: 0.3; }
 .item-image { margin-right: 10px;}
@@ -22,7 +20,6 @@ body {
 .items-list > li:hover .count{ opacity: 1}
 .items-list > li .progress{ opacity: 0.5}
 .items-list > li:hover .progress{ opacity: 1}
-.price { color:#468847 }
 .merchant.row{ padding-top:30px}
 .merchant.row h5 {padding-left: 10px;}
 .merchant.row .header { border-bottom: 1px solid #999; }
@@ -35,3 +32,16 @@ body {
 
 #top-navigation li a.tab-switcher i{ xopacity: 0; }
 #top-navigation li.active a.tab-switcher i, #top-navigation li:hover a.tab-switcher i{ opacity: 1; }
+
+.item .price {
+    vertical-align: baseline;
+    padding: 1px 9px 2px;
+    line-height: 14px;
+}
+
+.label-profit { color:#468847 }
+
+#merchants-list header > .navbar { margin-bottom: 0; }
+#merchants-list header { border-bottom: 1px solid #eee; }
+#merchants-list > ul > li { padding-top: 20px; }
+#merchants-list > ul > li:first-child { margin-top: 0; }

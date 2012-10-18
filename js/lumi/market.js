@@ -1,6 +1,8 @@
 define([
     'jquery'
-], function($){
+    , 'models/item/sell'
+    , 'models/item/buy'
+], function($, SellModel, BuyModel){
     var market = function(){
         var uri = {
                 who_sell : function(query){return 'http://market.lumiro.net/whosell.php?s=' + encodeURI(query) + '&field=price&order=asc&rand=' + Math.random()}
@@ -25,17 +27,16 @@ define([
                             if(creatorRExec = CreatorRegExp.exec(AditionalsString))
                                 creator = creatorRExec[1] + '\'s ';
                         }
-                        //items[items.length] = {
-                        items[items.length] = {
+                        items[items.length] = new SellModel({
                             id: re[3]
                             , name: creator+ re[4]+re[5].replace(/\<a\shref=\"http:\/\/www.poring.ru\/.*?>[\s\S]*<img.*?>[\s\S]*?\<\/a>/gim, '').replace(/\[[\d]+\]/,'').trim()
-                            , refine: re[2]
-                            , price: re[7].replace(/\./g,'')
-                            , count: re[8]
-                            , features: creator.length?[]:features
                             , slots : /\[[\d]+\]/.test(re[5]) ? /\[([\d]+)\]/.exec(re[5])[1] : 0
+                            , refine: re[2]
+                            , features: creator.length?[]:features
+                            , price: re[7].replace(/\./g,'')
+                            , count: re[8], amount: re[8]
                             , owner: re[9]
-                        };
+                        });
                     }
                     return items
                 }
@@ -45,13 +46,13 @@ define([
                         , re;
 
                     while( (re = ResultMatchRegExp.exec(data)) ){
-                        items[items.length] = {
+                        items[items.length] = new BuyModel({
                             id: re[2]
                             , name: re[3]
                             , price: re[5].replace(/\./g,'')
-                            , count: re[6]
+                            , count: re[6], amount: re[6]
                             , owner: re[7]
-                        }
+                        })
                     }
                     return items
                 }

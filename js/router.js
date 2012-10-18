@@ -9,9 +9,7 @@ define([
             , "settings" : "settings"
 
             , "merchants": "merchants"
-
-            , "buying" : "buying"
-            , "selling": "selling"
+            , "monitoring" : "monitoring"
             , "": "merchants"
         }
         , welcome: function(){
@@ -22,11 +20,8 @@ define([
             this.App.merchants()
         }
 
-        , buying: function(){
-            this.App.buying()
-        }
-        , selling: function(){
-            this.App.selling()
+        , monitoring: function(){
+            this.App.monitoring()
         }
         , settings: function(){
             this.App.settings()

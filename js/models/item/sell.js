@@ -1,16 +1,20 @@
+/**
+ * Sell item model
+ */
 define([
     'underscore'
     , 'backbone'
 ], function(_, Backbone){
     var SellItemModel = Backbone.Model.extend({
-        defaults: {
+        tagName: 'div'
+        , defaults: {
             id: 0
             , name: undefined
             , slots: 0
             , refine: 0
             , features : []
             , price: 0
-            , count: 0
+            , count: 0 , amount :0
             , owner: undefined
         }
         , hash: function(){
@@ -22,10 +26,6 @@ define([
                 , this.get('slots')
                 , _.reduce(this.get('features'),function(memo, feature){ return '|' + feature.id },'|')
             ].join("|");
-        }
-        , delete: function(){
-            this.destroy();
-            this.view.remove();
         }
     });
     return SellItemModel;

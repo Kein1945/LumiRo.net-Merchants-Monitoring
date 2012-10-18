@@ -1,3 +1,7 @@
+/**
+ * Merchants collection
+ */
+
 define([
     'underscore'
     , 'backbone'
@@ -7,6 +11,9 @@ define([
     var MerchantCollection = Backbone.Collection.extend({
         model: MerchantModel
         , localStorage: new Store("merchants")
+        , initialize: function(){
+            this.fetch()
+        }
         , retrieve: function(name){
             var merchant = this.where({name: name})[0];
             if( !merchant ){

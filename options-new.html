@@ -23,10 +23,10 @@
         <div class="container">
             <div class="nav-collapse collapse" id="top-navigation">
                 <ul class="nav">
-                    <li class="active"><a href="#merchants" class="tab-switcher"><i class="icon-user icon-white"></i> Merchants</a></li>
-                    <li><a href="#buying" class="tab-switcher"><i class="icon-gift icon-white"></i> Покупка</a></li>
-                    <li><a href="#selling" class="tab-switcher"><i class="icon-share-alt icon-white"></i> Продажа</a></li>
-                    <li><a href="#" id="refresh_data"><i class="icon-refresh icon-white"></i> Обновить <sup id="last-update-time"></sup></a></li>
+                    <li><a href="#" id="add-new"><i class="icon-plus"></i> Добавить</a></li>
+                    <li class="active"><a href="#merchants" data-tab="merchants" class="tab-switcher"><i class="icon-user icon-white"></i> Merchants</a></li>
+                    <li><a href="#monitoring" data-tab="monitoring" class="tab-switcher"><i class="icon-gift icon-white"></i> Monitoring</a></li>
+                    <li><a href="#" id="reload"><i class="icon-refresh"></i> Обновить <sup id="last-update-time"></sup></a></li>
                 </ul>
                 <ul class="nav pull-right">
                     <!--<li class="dropdown">-->
@@ -53,9 +53,6 @@
 </div>
 <div id="content">
     <section class="container merchants-tab hide" id="merchants">
-        <div id="merchant-control" class="row">
-            <a href="#" id="new-merchant" class="btn">Добавить</a>
-        </div>
         <div class="row">
             <div class="span3" id="merchant-list-sidebar-container">
                 <ul class="nav nav-list affix" id="merchant-list-sidebar">
@@ -68,11 +65,8 @@
             </div>
         </div>
     </section>
-    <section id="buying" class="container buying-tab hide">
-        <p>Buying hunting</p>
-    </section>
-    <section id="selling" class="container selling-tab hide">
-        <p>Selling</p>
+    <section id="monitoring" class="container monitoring-tab hide">
+        <p>monitoring hunting</p>
     </section>
     <section id="settings" class="container settings-tab hide">
 

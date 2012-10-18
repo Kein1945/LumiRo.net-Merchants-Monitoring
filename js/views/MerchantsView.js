@@ -11,6 +11,7 @@ define([
         initialize: function(){
             _.bindAll(this, 'render')
             this.collection = Merchants
+            this.collection.on('change', this.render)
             this.render()
         }
         , render: function(){
@@ -22,5 +23,5 @@ define([
             }, this))
         }
     });
-    return new MerchantsListView;
+    return MerchantsListView;
 });
