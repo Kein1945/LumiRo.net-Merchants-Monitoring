@@ -1,0 +1,104 @@
+<!--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">-->
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="vendors/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="vendors/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <!--<script type="text/javascript" src="js/jquery-ui-1.8.10.custom.min.js"></script>-->
+    <!--<script type="text/javascript" src="js/options.js"></script>-->
+    <!--<script type="text/javascript" src="js/storage.js"></script>-->
+    <!--<script type="text/javascript" src="js/utils.js"></script>-->
+    <style type="text/css">
+
+    </style>
+</head>
+<body id="lumi-app">
+<iframe id="sandbox" src="sandbox.html" style="display:none"></iframe>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <div class="nav-collapse collapse" id="top-navigation">
+                <ul class="nav">
+                    <li class="active"><a href="#merchants" class="tab-switcher"><i class="icon-user icon-white"></i> Merchants</a></li>
+                    <li><a href="#buying" class="tab-switcher"><i class="icon-gift icon-white"></i> Покупка</a></li>
+                    <li><a href="#selling" class="tab-switcher"><i class="icon-share-alt icon-white"></i> Продажа</a></li>
+                    <li><a href="#" id="refresh_data"><i class="icon-refresh icon-white"></i> Обновить <sup id="last-update-time"></sup></a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <!--<li class="dropdown">-->
+                        <!--<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Добавить <b class="caret"></b></a>-->
+                        <!--<ul class="dropdown-menu">-->
+                            <!--<li><a href="#prompt" id="add_merchant"><i class="icon-user"></i> Торговца</a></li>-->
+                            <!--<li class="dropdown-submenu"><a href="#" title=""><i class="icon-briefcase"></i> Предмет</a>-->
+                                <!--<ul class="dropdown-menu">-->
+                                    <!--<li><a href="#" ><i class="icon-gift"></i> Покупка</a></li>-->
+                                    <!--<li><a href="#" ><i class="icon-share-alt"></i> Продажа</a></li>-->
+                                <!--</ul>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                    <li>
+                        <a href="#settings" class="tab-switcher"><i class="icon-cog icon-white"></i> Настройки</a>
+                    </li>
+                    <li>
+                        <a href="#help" class="tab-switcher"><i class="icon-question-sign icon-white"></i> Помощь</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="content">
+    <section class="container merchants-tab hide" id="merchants">
+        <div id="merchant-control" class="row">
+            <a href="#" id="new-merchant" class="btn">Добавить</a>
+        </div>
+        <div class="row">
+            <div class="span3" id="merchant-list-sidebar-container">
+                <ul class="nav nav-list affix" id="merchant-list-sidebar">
+                </ul>
+            </div>
+            <div class="span9">
+                <section class="container-fluid" data-spy="scroll" data-target="#merchant-list-sidebar-container" id="merchants-list">
+                    <ul class="unstyled"></ul>
+                </section>
+            </div>
+        </div>
+    </section>
+    <section id="buying" class="container buying-tab hide">
+        <p>Buying hunting</p>
+    </section>
+    <section id="selling" class="container selling-tab hide">
+        <p>Selling</p>
+    </section>
+    <section id="settings" class="container settings-tab hide">
+
+    </section>
+    <section id="help" class="container help-tab hide">
+        <p style="margin-top: 40px">
+            Что бы добавить торговца выберите справа Добавить->Торговца.
+        </p>
+        <p>
+            Список скупки и продажи будет обновлен, обновление как и раньше раз в 20 минут.
+        </p>
+        <p>
+            На значке расширения будет отображаться прибыль в кк, с округлением до десятых.
+        </p>
+        <p>
+            На данные момент работает только отслуживание по торговцам. Покупка и продажа, а так же настройки будут доступны позже.
+        </p>
+        <p>
+            Заметки косяков и глюков отправляйте на почту kein.1945@gmail.com либо в личку на форуме. Желательно с подробным изложением насколько это возможно.
+            Так же буду благодарен за отзывы о интерфейсе - насколько он не интуитивный и что не понятно.
+            Пожелания привествуются.
+        </p>
+    </section>
+</div>
+
+<script data-main="js/main" src="js/libs/require.js"></script>
+
+</body>
+</html>

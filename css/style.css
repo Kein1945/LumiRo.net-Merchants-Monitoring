@@ -1,0 +1,37 @@
+body {
+    position: relative;
+    padding-top: 61px;
+    font-family: Georgia;
+}
+.popover .table { margin-bottom: 0; }
+
+#merchant-list-sidebar-container ul.nav { display: block; width: 240px }
+#merchant-list-sidebar-container .divider {background-color:#999}
+
+.hover-me{
+    cursor: pointer; color: #0088cc;
+}
+.item-image {width: 24px; height: 24px; display: inline-block; vertical-align: top;}
+.muted .item-image { opacity: 0.3; }
+.item-image { margin-right: 10px;}
+.row .items-list { margin: 0 20px 0 40px; }
+.items-list .progress {margin: 3px 5px 0 45px; height: 4px }
+.items-list > li {padding: 7px 10px 13px 10px;}
+.items-list > li .profit { margin-right: 45px}
+.items-list > li .count{ opacity: 0.1}
+.items-list > li:hover .count{ opacity: 1}
+.items-list > li .progress{ opacity: 0.5}
+.items-list > li:hover .progress{ opacity: 1}
+.price { color:#468847 }
+.merchant.row{ padding-top:30px}
+.merchant.row h5 {padding-left: 10px;}
+.merchant.row .header { border-bottom: 1px solid #999; }
+.merchant.row .header h3 { color: #333 }
+.merchant.row .header .nav { margin-top: 10px }
+.merchant.row .profit { margin-top: 4px; }
+#merchant-list { margin-top: -40px; padding:20px}
+#merchant-list-sidebar-container { padding-top: 10px; }
+#merchant-tab { padding-bottom: 80px; }
+
+#top-navigation li a.tab-switcher i{ xopacity: 0; }
+#top-navigation li.active a.tab-switcher i, #top-navigation li:hover a.tab-switcher i{ opacity: 1; }

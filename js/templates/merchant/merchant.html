@@ -1,0 +1,65 @@
+<header>
+    <div class="navbar ">
+        <div class="header clearfix">
+            <ul class="nav nav-pills pull-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><% print((new Date(merchant.update)).getHours()+':'+(new Date(merchant.update)).getMinutes())%> <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a tabindex="-1" href="#" class="refresh_merchant" data-name="<%=name%>"><i class="icon-refresh"></i> Переставить</a></li>
+                        <li><a tabindex="-1" href="#" class="remove_merchant" data-name="<%=name%>"><i class="icon-remove"></i> Удалить</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <h4><%=merchant.name%></h4>
+        </div>
+    </div>
+</header>
+<section>
+    <% if (merchant.sell) { %>
+        <ul>
+        <% _.each(merchant.sell, function(item){ %>
+            <li>
+                <div>
+                    <span<% if (item.amount==0) { %> class="muted"<% } %>>
+                    <!--<span style="<%=item.style%>" class="item-image"></span>-->
+                    <span class="item-image"><img src="http://file5.ratemyserver.net/items/large/<% if(/\sCard$/.test(item.name)){%>card<%} else { print(item.id)}%>.gif"/></span>
+                    <% if (item.refain) { %>
+                    <sup><%=item.refain%></sup>
+                    <% } %>
+                    <span><%=item.name%></span> <% if (item.id!=12233 && (item.features.length || item.slots)){ %><sub<% if (item.id!=12233 && item.features.length) { %> class="cards hover-me"<% } %>>[<% if (item.id!=12233 && item.features.length) { %><%=item.features.length%>/<% } %><%=item.slots%>]</sub><%}%>
+
+                    <% if (item.id!=12233 && item.features.length) { %>
+                    <div class="hide">
+                        <table class="table table-striped">
+                            <tbody>
+                            <% _.each(item.features, function(feature){ %>
+                            <!--TODO: Use card id-->
+                            <tr><td><img src="http://file5.ratemyserver.net/items/small/<% if(/\sCard$/.test(feature.name)){%>card<%} else { print(feature.id)}%>.gif"/> <%=feature.name%></td></tr>
+                            <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+                    </span>
+
+                            <span class="pull-right<% if (item.amount==0) { %> muted<% } %><% if (item.count > 1) { %> hover-me" rel="tooltip" data-original-title="<% if (item.count != item.amount && item.amount > 0) { %>
+                            Еще <%=item.amount%> из <%=item.count%>
+                            <% } else { %>Всего <% if(item.amount < 1) {%>было <%}%><%=item.count%><% } %><% } %>"><%print(formatPrice(item.price))%></span>
+                    <% if (item.amount < item.count) { %><span class="pull-right profit badge badge-success">+ <%print(formatPrice(item.price*(item.count-item.amount)))%></span>
+                    <!--<span class="pull-right price">+ <%print(formatPrice(item.profit))%></span>-->
+                    <% } %>
+                </div>
+                <% if (item.count != 1) { %>
+                <% if (item.count != item.amount && item.amount > 0) { %>
+                <div class="progress complete" rel="tooltip" data-original-title="Продано <%print(item.count - item.amount)%> из <%=item.count%>">
+                    <div class="bar bar-success" style="width:<%print(100 - 100*item.amount/item.count)%>%"></div>
+                    <div class="bar bar-info" style="width:<%print(100*item.amount/item.count)%>%"></div>
+                </div>
+                <% } %>
+
+                <% } %>
+            </li>
+        <% }) %>
+        </ul>
+    <% } %>
+</section>
